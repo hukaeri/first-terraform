@@ -1,22 +1,24 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
-      Version = "~>3.27"
+      source  = "hashicorp/aws"
+      version = "~>3.0"
     }
   }
 
-  required_version = ">=0.14.9"
+  required_version = ">=0.13.0"
 
-  backend "s3" {
-    bucket = "tftestbucket"
-    key    = "path/to/my/key"
-    region = "eu-west-1"
-  }
+    backend "s3" {
+      bucket = "tf-lxy-test"
+      key    = "path/to/my/key"
+      region = "eu-west-1"
+      dynamodb_table = "terraform-state-locking-1"
+      encrypt        = true
+    }
 
 }
 
 provider "aws" {
-  version = "~>3.0"
-  region  = "eu-west-1"
+  region     = "eu-west-1"
+  profile = "tw-beach-lxy"
 }
