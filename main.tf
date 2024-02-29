@@ -8,16 +8,17 @@ terraform {
 
   required_version = ">=0.13.0"
 
-  backend "s3" {
-    bucket         = "tf-lxy-test"
-    key            = "path/to/my/key"
-    region         = "eu-west-1"
-    dynamodb_table = "terraform-state-locking-1"
-    encrypt        = true
-  }
+  #  backend "s3" {
+  #    bucket         = "tf-lxy-test"
+  #    key            = "path/to/my/key"
+  #    region         = "eu-west-1"
+  #    dynamodb_table = "terraform-state-locking-1"
+  #    encrypt        = true
+  #  }
 
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region  = "eu-west-1"
+  profile = "tw-beach-lxy"
 }
