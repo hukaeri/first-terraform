@@ -9,13 +9,17 @@ jobs:
   showinfo:
     runs-on: ubuntu-latest
     steps:
+      - name: show hello world
+        run: echo "hello world"
       - name: show commit message
+        environment: environment
         run: echo "commit - ${{github.event.head_commit.message}}"
 
   test:
     name: Test
+    needs: showinfo
     runs-on: ubuntu-latest
-    environment: production
+    environment: environment
     steps:
       - name: test stuff
         run: echo "Simulating tests"
