@@ -18,7 +18,7 @@ jobs:
     name: Test
     needs: showinfo
     runs-on: ubuntu-latest
-    environment: environment
+    environment: production
     steps:
       - name: test stuff
         run: echo "Simulating tests"
