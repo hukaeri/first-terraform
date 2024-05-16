@@ -6,76 +6,18 @@ on:
   pull_request:
 
 jobs:
-  init:
-    name: 'Setup'
+  showinfo:
     runs-on: ubuntu-latest
-    environment: production
-
-    permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-      actions: read
-
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Show message
+        run: echo "Hello everybody!"
+      - name: show commit message
+        run: echo "commit - ${{github.event.head_commit.message}}"
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.1.7
-          terraform_wrapper: false
-
-      - uses: actions/cache@v4
-        name: Cache plugin dir
-        with:
-          path: ~/.tflint.d/plugins
-          key: tflint-${{ hashFiles('.tflint.hcl') }}
-
-      - uses: terraform-linters/setup-tflint@v4
-        name: Setup TFLint
-        with:
-          tflint_version: v0.50.3
-
-  terraform:
-    name: 'Terraform Check'
+  test:
+    if: "contains(github.event.head_commit.message, '[!go deploy!]')"
+    name: Test
     runs-on: ubuntu-latest
-    environment: production
-
-    permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-      actions: read
-
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
     steps:
-    - name: Terraform Format
-      run: terraform fmt -check
-
-    - name: Init TFLint
-      run: tflint --init
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Run TFLint
-      run: tflint -f compact --config=.tflint.hcl
-
-    - name: Checkov GitHub Action
-      uses: bridgecrewio/checkov-action@master
-      with:
-        # This will add both a CLI output to the console and create a results.sarif file
-        framework: terraform
-#        output_format: cli,sarif
-#        output_file_path: console,results.sarif
-
-    - name: Terraform Validate
-      run: terraform validate
+      - name: test stuff
+        run: echo "Simulating tests"
