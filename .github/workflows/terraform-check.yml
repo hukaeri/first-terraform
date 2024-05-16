@@ -9,15 +9,8 @@ jobs:
   showinfo:
     runs-on: ubuntu-latest
     steps:
-      - name: Show message
-        run: echo "Hello everybody!"
       - name: show commit message
         run: echo "commit - ${{github.event.head_commit.message}}"
-
-  test:
-    if: "contains(github.event.head_commit.message, '[!go deploy!]')"
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
       - name: test stuff
+        if: "contains(github.event.head_commit.message, '[!go deploy!]')"
         run: echo "Simulating tests"
